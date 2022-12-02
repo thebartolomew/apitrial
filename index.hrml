@@ -1,0 +1,133 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requests</title>
+</head>
+<style>
+    body{
+        background-color: gray;
+    }
+    .inps{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 50px;
+    }
+    #in15, #in16, #in17{
+        width: 100px;
+    }
+    .btns{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    img {
+        height: 200px;
+    }
+    .goods{
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .good{
+        text-align: center;
+        padding: 20px;
+        
+    }
+    .requests {
+        display: flex;
+        justify-content: center;
+
+    }
+    button{
+        padding: 20px;
+        border-radius: 10px;
+        border-color: black;
+    }
+   
+</style>
+<body>      
+    <div class="inps">
+        <input type="text" id="in15" placeholder="goods name">
+        <input type="text" id="in16" placeholder="image link">
+        <input type="text" id="in17" placeholder="price">
+        <input type="text" id="in18" placeholder="id">
+    </div>
+    <div class="btns">
+    
+        <button id="create">create</button>
+        <button id="update">update</button>
+        <button id="delete">delete</button>
+    </div> 
+    <div class="goods">
+       
+    </div>
+
+   
+    <script>
+        let name = document.querySelector("#in15").value
+        let image = document.querySelector("#in16").value
+        let price = document.querySelector("#in17").value
+        
+        fetch('https://637b0615702b9830b9f7f495.mockapi.io/shops')
+        .then(res => {return res.json()}).then(json => {
+           json.forEach(element => {
+            console.log(element)
+            let div = document.createElement('div');
+            div.className = 'product-' + element.id;
+            div.innerHTML = `
+            <div class="good">
+                <p>Name: ${element.name}</p>
+                <img src="${element.image}" alt="">
+                <p>Price: ${element.price}</p>
+                <p>id: ${element.id}</p>
+            </div>
+            `
+            document.querySelector('.goods').append(div)
+           });
+        })
+        document.querySelector('#create').addEventListener('click',()=>{
+            
+            fetch('https://637b0615702b9830b9f7f495.mockapi.io/shops',{
+                method:'POST',
+                headers:{ 'Content-Type': 'application/json;charset=utf-8'},
+                body: JSON.stringify({
+                    name: name,
+                    price: price,
+                    image: image
+                })
+            })
+            .then(responce => {
+                if (responce) {
+                    let div = document.createElement('div');
+                    div.className = 'product-' + 12;
+                    div.innerHTML = `
+                    <div class="good">
+                        <p>Name: ${name}</p>
+                        <img src="${image}" alt="">
+                        <p>Price: ${price}</p>
+                        <p>id: 12</p>
+                    </div>
+                    `
+                    document.querySelector('.goods').append(div);
+                }
+            })
+        })
+        document.querySelector('#delete').addEventListener('click',()=>{
+            let id_del = document.querySelector('#in18').value
+            fetch(`https://637b0615702b9830b9f7f495.mockapi.io/shops/${id_del}` ,{method:"DELETE"})
+            document.querySelector('.product-' + id_del).remove();
+            
+        })
+
+        document.querySelector('#update').addEventListener('click',()=>{
+            let id_up = document.querySelector('#in18').value
+            fetch(`https://637b0615702b9830b9f7f495.mockapi.io/shops/${id_up}`,{method:'PUT'})
+        })
+       
+    </script>
+</body>
+
+</html>
