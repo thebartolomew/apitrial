@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="output"></div>
+</body>
+<script>
+    function encrypt(text){
+        let result = ''
+        for(let i = 0;i < text.length;i++){
+            let binary = String(text.charCodeAt(i).toString(2))
+            let new_binary = ''
+            for(let n = 0; n < binary.length;n++){
+                if (binary[n] == '1'){
+                    new_binary = new_binary+'0'
+                }
+                else{
+                    new_binary = new_binary+'1'
+                }
+            }
+            let result1 ='1'+new_binary
+            let result2 = String.fromCharCode(parseInt(result1,2))
+            result = result + result2
+
+        }
+        return result
+       
+   
+    }
+    let txt = ''
+    console.log(encrypt(txt))
+
+    document.querySelector('.output').innerHTML = encrypt(txt)
+</script>
+</html>
